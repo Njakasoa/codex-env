@@ -2,11 +2,830 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Codex Tailwind App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project Quote Intake – Digital Marketing</title>
   <link href="./dist/output.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-100">
-  <h1 class="text-3xl font-bold text-center mt-8">Hello, Tailwind!</h1>
+<body class="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 text-slate-800">
+  <header class="sticky top-0 z-40 bg-white/70 backdrop-blur border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-brand-600 grid place-items-center text-white font-bold">DM</div>
+        <div>
+          <h1 class="text-lg font-semibold leading-tight">Project Quote Intake</h1>
+          <p class="text-xs text-slate-500 leading-tight">Digital marketing discovery & scoping form</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="btn-load" class="btn btn-outline" title="Restore last saved form">Load draft</button>
+        <button id="btn-save" class="btn btn-outline" title="Save form locally (browser)">Save draft</button>
+        <button id="btn-clear" class="btn btn-outline" title="Clear everything">Clear</button>
+      </div>
+    </div>
+    <div class="w-full">
+      <div class="max-w-6xl mx-auto px-4 pb-4">
+        <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+          <div id="progress" class="h-2 bg-brand-500 rounded-full transition-all" style="width: 14.2857%"></div>
+        </div>
+        <div class="text-xs text-slate-500 mt-1"><span id="stepLabel">Step 1 of 7 – Contact</span></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8">
+
+    <!-- Wizard container -->
+    <form id="intakeForm" class="space-y-8">
+
+      <!-- STEP 1: Contact & Company -->
+      <section class="step" data-step="1">
+        <div class="card p-6">
+          <h2 class="text-xl font-semibold mb-2">Contact & Company</h2>
+          <p class="text-sm text-slate-500 mb-6">Tell us who to contact and a bit about the business.</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label class="req block text-sm mb-1" for="contact_name">Contact name</label>
+              <input id="contact_name" name="contact_name" required type="text" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="Jane Doe" />
+            </div>
+            <div>
+              <label class="req block text-sm mb-1" for="contact_email">Contact email</label>
+              <input id="contact_email" name="contact_email" required type="email" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="jane@company.com" />
+            </div>
+            <div>
+              <label class="block text-sm mb-1" for="contact_phone">Phone / WhatsApp</label>
+              <input id="contact_phone" name="contact_phone" type="tel" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="+261…" />
+            </div>
+            <div>
+              <label class="req block text-sm mb-1" for="company_name">Company / Organization</label>
+              <input id="company_name" name="company_name" required type="text" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="Acme Ltd" />
+            </div>
+            <div>
+              <label class="block text-sm mb-1" for="website">Website</label>
+              <input id="website" name="website" type="url" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="https://…" />
+            </div>
+            <div>
+              <label class="block text-sm mb-1" for="industry">Industry</label>
+              <input id="industry" name="industry" type="text" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="e.g. Travel, Retail…" />
+            </div>
+            <div>
+              <label class="block text-sm mb-1" for="country">Country</label>
+              <input id="country" name="country" type="text" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="Madagascar" />
+            </div>
+            <div>
+              <label class="block text-sm mb-1" for="language">Preferred language</label>
+              <select id="language" name="language" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500">
+                <option>English</option>
+                <option>French</option>
+                <option>Malagasy</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2: Current Status & Access -->
+      <section class="step hidden" data-step="2">
+        <div class="card p-6">
+          <h2 class="text-xl font-semibold mb-2">Current Status</h2>
+          <p class="text-sm text-slate-500 mb-6">What you already have in place.</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="col-span-1 md:col-span-2">
+              <label class="block text-sm mb-2">Existing assets (toggle what exists)</label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <label class="toggle flex items-center gap-3 p-3 rounded-xl border border-slate-200 cursor-pointer select-none">
+                    <input type="checkbox" name="assets_website" class="peer sr-only" />
+                    <span class="inline-flex h-6 w-11 items-center rounded-full bg-slate-300 p-0.5 transition-colors duration-200 peer-checked:bg-brand-600 peer-checked:justify-end">
+                      <span class="h-5 w-5 rounded-full bg-white shadow transition-transform duration-200"></span>
+                    </span>
+                    <span>Website / Shop</span>
+                  </label>
+                  <label class="toggle flex items-center gap-3 p-3 rounded-xl border border-slate-200 cursor-pointer select-none">
+                    <input type="checkbox" name="assets_brandbook" class="peer sr-only" />
+                    <span class="inline-flex h-6 w-11 items-center rounded-full bg-slate-300 p-0.5 transition-colors duration-200 peer-checked:bg-brand-600 peer-checked:justify-end">
+                      <span class="h-5 w-5 rounded-full bg-white shadow transition-transform duration-200"></span>
+                    </span>
+                    <span>Brandbook / Logo</span>
+                  </label>
+                  <label class="toggle flex items-center gap-3 p-3 rounded-xl border border-slate-200 cursor-pointer select-none">
+                    <input type="checkbox" name="assets_gtm" class="peer sr-only" />
+                    <span class="inline-flex h-6 w-11 items-center rounded-full bg-slate-300 p-0.5 transition-colors duration-200 peer-checked:bg-brand-600 peer-checked:justify-end">
+                      <span class="h-5 w-5 rounded-full bg-white shadow transition-transform duration-200"></span>
+                    </span>
+                    <span>GTM / Analytics</span>
+                  </label>
+                  
+                  <label class="toggle flex items-center gap-3 p-3 rounded-xl border border-slate-200 cursor-pointer select-none">
+                    <input type="checkbox" name="assets_pixels" class="peer sr-only" />
+                    <span class="inline-flex h-6 w-11 items-center rounded-full bg-slate-300 p-0.5 transition-colors duration-200 peer-checked:bg-brand-600 peer-checked:justify-end">
+                      <span class="h-5 w-5 rounded-full bg-white shadow transition-transform duration-200"></span>
+                    </span>
+                    <span>Meta/TikTok/LinkedIn pixels</span>
+                  </label>
+                  
+                  <label class="toggle flex items-center gap-3 p-3 rounded-xl border border-slate-200 cursor-pointer select-none">
+                    <input type="checkbox" name="assets_crm" class="peer sr-only" />
+                    <span class="inline-flex h-6 w-11 items-center rounded-full bg-slate-300 p-0.5 transition-colors duration-200 peer-checked:bg-brand-600 peer-checked:justify-end">
+                      <span class="h-5 w-5 rounded-full bg-white shadow transition-transform duration-200"></span>
+                    </span>
+                    <span>CRM / Email (Brevo, etc.)</span>
+                  </label>
+                  
+                  <label class="toggle flex items-center gap-3 p-3 rounded-xl border border-slate-200 cursor-pointer select-none">
+                    <input type="checkbox" name="assets_content" class="peer sr-only" />
+                    <span class="inline-flex h-6 w-11 items-center rounded-full bg-slate-300 p-0.5 transition-colors duration-200 peer-checked:bg-brand-600 peer-checked:justify-end">
+                      <span class="h-5 w-5 rounded-full bg-white shadow transition-transform duration-200"></span>
+                    </span>
+                    <span>Photo/Video library</span>
+                  </label>                  
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm mb-1" for="cms">Current CMS / Stack</label>
+              <select id="cms" name="cms" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500">
+                <option>WordPress</option>
+                <option>Shopify</option>
+                <option>Custom</option>
+                <option>Wix</option>
+                <option>None</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm mb-1" for="list_size">Email list size (approx.)</label>
+              <input id="list_size" name="list_size" type="number" min="0" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="e.g. 2500" />
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm mb-1" for="drive_link">Share asset folder (Drive/Dropbox)</label>
+              <input id="drive_link" name="drive_link" type="url" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="https://drive.google.com/…" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 3: Goals & Audience -->
+      <section class="step hidden" data-step="3">
+        <div class="card p-6">
+          <h2 class="text-xl font-semibold mb-2">Goals & Audience</h2>
+          <p class="text-sm text-slate-500 mb-6">What success looks like and who we’re targeting.</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label class="req block text-sm mb-1" for="primary_goal">Primary goal</label>
+              <select id="primary_goal" name="primary_goal" required class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500">
+                <option value="">Select…</option>
+                <option>Lead generation</option>
+                <option>Online sales</option>
+                <option>Brand awareness</option>
+                <option>App installs</option>
+                <option>Community growth</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm mb-1" for="kpis">Key KPIs</label>
+              <input id="kpis" name="kpis" type="text" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="CPL, ROAS, CTR, MQLs, etc." />
+            </div>
+            <div>
+              <label class="block text-sm mb-1" for="audience_type">Audience type</label>
+              <select id="audience_type" name="audience_type" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500">
+                <option>B2C</option>
+                <option>B2B</option>
+                <option>Both</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm mb-1">Target locations</label>
+              <div class="chips" data-name="target_locations"></div>
+              <p class="text-xs text-slate-500 mt-1">Press Enter to add each location.</p>
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm mb-1" for="personas">Describe your ideal customer</label>
+              <textarea id="personas" name="personas" rows="3" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="Who are they, what do they need, pain points, objections…"></textarea>
+            </div>
+            <div>
+              <label class="block text-sm mb-1">Competitors</label>
+              <div class="chips" data-name="competitors"></div>
+            </div>
+            <div>
+              <label class="block text-sm mb-1">Reference links / inspirations</label>
+              <div class="chips" data-name="references"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 4: Channels & Deliverables -->
+      <section class="step hidden" data-step="4">
+        <div class="card p-6">
+          <h2 class="text-xl font-semibold mb-2">Channels & Deliverables</h2>
+          <p class="text-sm text-slate-500 mb-6">Choose what you need. Extra questions appear based on selection.</p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- SEO -->
+            <fieldset class="p-4 rounded-2xl border border-slate-200">
+              <label class="flex items-center gap-3">
+                <input type="checkbox" class="channel" data-target="#seoFields" name="ch_seo">
+                <span class="font-medium">SEO</span>
+              </label>
+              <div id="seoFields" class="mt-4 hidden space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm mb-1" for="seo_pages"># of pages to optimize</label>
+                    <input id="seo_pages" name="seo_pages" type="number" min="0" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="e.g. 20" />
+                  </div>
+                  <div>
+                    <label class="block text-sm mb-1" for="seo_blogs">Blog posts / month</label>
+                    <input id="seo_blogs" name="seo_blogs" type="number" min="0" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="e.g. 4" />
+                  </div>
+                </div>
+                <label class="flex items-center gap-2">
+                  <input type="checkbox" name="seo_audit"> <span>Need a full SEO audit</span>
+                </label>
+                <label class="flex items-center gap-2">
+                  <input type="checkbox" name="seo_linkbuilding"> <span>Include link building</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <!-- PPC / Ads -->
+            <fieldset class="p-4 rounded-2xl border border-slate-200">
+              <label class="flex items-center gap-3">
+                <input type="checkbox" class="channel" data-target="#ppcFields" name="ch_ppc">
+                <span class="font-medium">Paid Ads (PPC)</span>
+              </label>
+              <div id="ppcFields" class="mt-4 hidden space-y-4">
+                <div>
+                  <label class="block text-sm mb-1">Platforms</label>
+                  <div class="grid grid-cols-2 gap-2">
+                    <label class="inline-flex items-center gap-2"><input type="checkbox" name="ppc_platforms" value="Google"> Google</label>
+                    <label class="inline-flex items-center gap-2"><input type="checkbox" name="ppc_platforms" value="Meta"> Meta</label>
+                    <label class="inline-flex items-center gap-2"><input type="checkbox" name="ppc_platforms" value="TikTok"> TikTok</label>
+                    <label class="inline-flex items-center gap-2"><input type="checkbox" name="ppc_platforms" value="LinkedIn"> LinkedIn</label>
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm mb-1" for="ppc_spend">Monthly ad spend (est.)</label>
+                    <input id="ppc_spend" name="ppc_spend" type="number" min="0" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="e.g. 1000" />
+                  </div>
+                  <div>
+                    <label class="block text-sm mb-1" for="ppc_geo">Target geographies</label>
+                    <input id="ppc_geo" name="ppc_geo" type="text" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="e.g. MG, FR" />
+                  </div>
+                </div>
+                <label class="flex items-center gap-2"><input type="checkbox" name="ppc_tracking"> Conversion tracking set up</label>
+              </div>
+            </fieldset>
+
+            <!-- Social Media Mgmt -->
+            <fieldset class="p-4 rounded-2xl border border-slate-200">
+              <label class="flex items-center gap-3">
+                <input type="checkbox" class="channel" data-target="#smFields" name="ch_social">
+                <span class="font-medium">Social Media Management</span>
+              </label>
+              <div id="smFields" class="mt-4 hidden space-y-4">
+                <div>
+                  <label class="block text-sm mb-1">Platforms</label>
+                  <div class="grid grid-cols-2 gap-2">
+                    <label class="inline-flex items-center gap-2"><input type="checkbox" name="sm_platforms" value="Facebook"> Facebook</label>
+                    <label class="inline-flex items-center gap-2"><input type="checkbox" name="sm_platforms" value="Instagram"> Instagram</label>
+                    <label class="inline-flex items-center gap-2"><input type="checkbox" name="sm_platforms" value="TikTok"> TikTok</label>
+                    <label class="inline-flex items-center gap-2"><input type="checkbox" name="sm_platforms" value="LinkedIn"> LinkedIn</label>
+                    <label class="inline-flex items-center gap-2"><input type="checkbox" name="sm_platforms" value="YouTube"> YouTube</label>
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm mb-1" for="sm_posts">Posts per week</label>
+                    <input id="sm_posts" name="sm_posts" type="number" min="0" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="e.g. 5" />
+                  </div>
+                  <div>
+                    <label class="block text-sm mb-1" for="sm_community">Community mgmt hours / wk</label>
+                    <input id="sm_community" name="sm_community" type="number" min="0" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="e.g. 3" />
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- Content -->
+            <fieldset class="p-4 rounded-2xl border border-slate-200">
+              <label class="flex items-center gap-3">
+                <input type="checkbox" class="channel" data-target="#contentFields" name="ch_content">
+                <span class="font-medium">Content (Blog / Copy / Landing Pages)</span>
+              </label>
+              <div id="contentFields" class="mt-4 hidden space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm mb-1" for="content_blogs">Blog posts / month</label>
+                    <input id="content_blogs" name="content_blogs" type="number" min="0" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" />
+                  </div>
+                  <div>
+                    <label class="block text-sm mb-1" for="content_landings">Landing pages</label>
+                    <input id="content_landings" name="content_landings" type="number" min="0" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" />
+                  </div>
+                </div>
+                <label class="block text-sm mb-1" for="content_languages">Copywriting languages</label>
+                <input id="content_languages" name="content_languages" type="text" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="EN, FR, MG" />
+              </div>
+            </fieldset>
+
+            <!-- Email / CRM -->
+            <fieldset class="p-4 rounded-2xl border border-slate-200">
+              <label class="flex items-center gap-3">
+                <input type="checkbox" class="channel" data-target="#emailFields" name="ch_email">
+                <span class="font-medium">Email / CRM (Brevo, Mailchimp…)</span>
+              </label>
+              <div id="emailFields" class="mt-4 hidden space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm mb-1" for="email_platform">Platform</label>
+                    <input id="email_platform" name="email_platform" type="text" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="Brevo" />
+                  </div>
+                  <div>
+                    <label class="block text-sm mb-1" for="email_frequency">Newsletters / month</label>
+                    <input id="email_frequency" name="email_frequency" type="number" min="0" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" />
+                  </div>
+                </div>
+                <label class="inline-flex items-center gap-2 mr-4"><input type="checkbox" name="email_automation"> Automations / workflows</label>
+                <label class="inline-flex items-center gap-2"><input type="checkbox" name="email_segmentation"> Segmentation</label>
+              </div>
+            </fieldset>
+
+            <!-- Web Dev -->
+            <fieldset class="p-4 rounded-2xl border border-slate-200">
+              <label class="flex items-center gap-3">
+                <input type="checkbox" class="channel" data-target="#webFields" name="ch_web">
+                <span class="font-medium">Website / E‑commerce</span>
+              </label>
+              <div id="webFields" class="mt-4 hidden space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm mb-1" for="web_type">Type</label>
+                    <select id="web_type" name="web_type" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500">
+                      <option>WordPress</option>
+                      <option>Shopify</option>
+                      <option>Custom</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-sm mb-1" for="web_pages"># of pages / products</label>
+                    <input id="web_pages" name="web_pages" type="number" min="0" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" />
+                  </div>
+                </div>
+                <label class="block text-sm mb-1" for="web_integrations">Integrations needed</label>
+                <input id="web_integrations" name="web_integrations" type="text" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="Payments, CRM, ERP…" />
+                <label class="inline-flex items-center gap-2"><input type="checkbox" name="web_hosting"> Need hosting</label>
+              </div>
+            </fieldset>
+
+            <!-- Analytics & Tracking -->
+            <fieldset class="p-4 rounded-2xl border border-slate-200">
+              <label class="flex items-center gap-3">
+                <input type="checkbox" class="channel" data-target="#analyticsFields" name="ch_analytics">
+                <span class="font-medium">Analytics & Tracking</span>
+              </label>
+              <div id="analyticsFields" class="mt-4 hidden space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                  <label class="inline-flex items-center gap-2"><input type="checkbox" name="an_ga4"> GA4</label>
+                  <label class="inline-flex items-center gap-2"><input type="checkbox" name="an_gtm"> GTM</label>
+                  <label class="inline-flex items-center gap-2"><input type="checkbox" name="an_pixels"> Meta / TikTok pixels</label>
+                  <label class="inline-flex items-center gap-2"><input type="checkbox" name="an_consent"> Consent management</label>
+                </div>
+                <label class="block text-sm mb-1" for="an_reporting">Reporting frequency</label>
+                <select id="an_reporting" name="an_reporting" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500">
+                  <option>Weekly</option>
+                  <option>Bi-weekly</option>
+                  <option>Monthly</option>
+                </select>
+              </div>
+            </fieldset>
+
+            <!-- Branding / Design -->
+            <fieldset class="p-4 rounded-2xl border border-slate-200">
+              <label class="flex items-center gap-3">
+                <input type="checkbox" class="channel" data-target="#brandFields" name="ch_brand">
+                <span class="font-medium">Branding & Design</span>
+              </label>
+              <div id="brandFields" class="mt-4 hidden space-y-4">
+                <label class="inline-flex items-center gap-2"><input type="checkbox" name="brand_logo"> Logo / Identity</label>
+                <label class="inline-flex items-center gap-2"><input type="checkbox" name="brand_guidelines"> Brand guidelines</label>
+                <label class="inline-flex items-center gap-2"><input type="checkbox" name="brand_mockups"> Ad / Social templates</label>
+              </div>
+            </fieldset>
+
+            <!-- Video / Reels -->
+            <fieldset class="p-4 rounded-2xl border border-slate-200">
+              <label class="flex items-center gap-3">
+                <input type="checkbox" class="channel" data-target="#videoFields" name="ch_video">
+                <span class="font-medium">Video / Reels</span>
+              </label>
+              <div id="videoFields" class="mt-4 hidden space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm mb-1" for="video_count"># of videos / month</label>
+                    <input id="video_count" name="video_count" type="number" min="0" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" />
+                  </div>
+                  <div>
+                    <label class="block text-sm mb-1" for="video_length">Typical length (sec)</label>
+                    <input id="video_length" name="video_length" type="number" min="0" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" />
+                  </div>
+                </div>
+                <label class="inline-flex items-center gap-2"><input type="checkbox" name="video_filming"> On‑site filming required</label>
+                <label class="inline-flex items-center gap-2"><input type="checkbox" name="video_subtitles"> Subtitles</label>
+              </div>
+            </fieldset>
+
+            <!-- Training -->
+            <fieldset class="p-4 rounded-2xl border border-slate-200">
+              <label class="flex items-center gap-3">
+                <input type="checkbox" class="channel" data-target="#trainFields" name="ch_training">
+                <span class="font-medium">Team Training</span>
+              </label>
+              <div id="trainFields" class="mt-4 hidden space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm mb-1" for="train_topics">Topics</label>
+                    <input id="train_topics" name="train_topics" type="text" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="Ads, SEO, Analytics…" />
+                  </div>
+                  <div>
+                    <label class="block text-sm mb-1" for="train_seats"># of seats</label>
+                    <input id="train_seats" name="train_seats" type="number" min="0" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" />
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 5: Timeline & Budget -->
+      <section class="step hidden" data-step="5">
+        <div class="card p-6">
+          <h2 class="text-xl font-semibold mb-2">Timeline & Budget</h2>
+          <p class="text-sm text-slate-500 mb-6">Help us right‑size the proposal.</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div>
+              <label class="block text-sm mb-1" for="start_date">Desired start</label>
+              <input id="start_date" name="start_date" type="date" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" />
+            </div>
+            <div>
+              <label class="block text-sm mb-1" for="deadline">Deadline / launch</label>
+              <input id="deadline" name="deadline" type="date" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" />
+            </div>
+            <div>
+              <label class="block text-sm mb-1" for="urgency">Urgency</label>
+              <select id="urgency" name="urgency" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500">
+                <option>Flexible</option>
+                <option>Normal</option>
+                <option>Urgent</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm mb-1" for="currency">Currency</label>
+              <select id="currency" name="currency" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500">
+                <option>MGA</option>
+                <option>EUR</option>
+                <option>USD</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm mb-1" for="budget_monthly">Monthly budget (est.)</label>
+              <input id="budget_monthly" name="budget_monthly" type="number" min="0" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="e.g. 2 000 000" />
+            </div>
+            <div>
+              <label class="block text-sm mb-1" for="budget_onetime">One‑time budget (setup/dev)</label>
+              <input id="budget_onetime" name="budget_onetime" type="number" min="0" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="e.g. 5 000 000" />
+            </div>
+            <div class="md:col-span-3">
+              <label class="block text-sm mb-1" for="constraints">Constraints / approvals</label>
+              <textarea id="constraints" name="constraints" rows="2" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="Procurement, compliance, brand rules, etc."></textarea>
+            </div>
+          </div>
+          <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+              <div class="text-xs text-slate-500">Complexity score</div>
+              <div class="text-2xl font-semibold" id="complexityScore">0</div>
+              <div class="text-xs" id="complexityLabel">Low</div>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 md:col-span-2">
+              <div class="text-xs text-slate-500 mb-1">Notes</div>
+              <textarea id="notes" name="notes" rows="2" class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" placeholder="Anything else we should know"></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 6: Compliance & Access -->
+      <section class="step hidden" data-step="6">
+        <div class="card p-6">
+          <h2 class="text-xl font-semibold mb-2">Compliance & Access</h2>
+          <p class="text-sm text-slate-500 mb-6">Logistics for a smooth start.</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-sm mb-1">Regulatory needs</label>
+              <div class="space-y-2">
+                <label class="inline-flex items-center gap-2"><input type="checkbox" name="gdpr"> GDPR</label>
+                <label class="inline-flex items-center gap-2"><input type="checkbox" name="hipaa"> Health/medical sensitive</label>
+                <label class="inline-flex items-center gap-2"><input type="checkbox" name="finance"> Finance/regulated</label>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm mb-1">Access needed</label>
+              <div class="grid grid-cols-2 gap-2">
+                <label class="inline-flex items-center gap-2"><input type="checkbox" name="acc_ga4"> GA4</label>
+                <label class="inline-flex items-center gap-2"><input type="checkbox" name="acc_gtm"> GTM</label>
+                <label class="inline-flex items-center gap-2"><input type="checkbox" name="acc_meta"> Meta Business</label>
+                <label class="inline-flex items-center gap-2"><input type="checkbox" name="acc_ads"> Google Ads</label>
+                <label class="inline-flex items-center gap-2"><input type="checkbox" name="acc_brevo"> Brevo</label>
+                <label class="inline-flex items-center gap-2"><input type="checkbox" name="acc_wp"> WordPress / Shopify</label>
+              </div>
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm mb-1" for="uploads">Optional: upload briefs / RFP (not stored)</label>
+              <input id="uploads" name="uploads" type="file" multiple class="w-full rounded-xl border-slate-300 focus:border-brand-500 focus:ring-brand-500" />
+              <p class="text-xs text-slate-500 mt-1">Files stay on your device; this page has no backend.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 7: Review & Export -->
+      <section class="step hidden" data-step="7">
+        <div class="card p-6">
+          <h2 class="text-xl font-semibold mb-2">Review & Export</h2>
+          <p class="text-sm text-slate-500 mb-6">Export your answers to share with your team or paste into your quote template.</p>
+          <div class="flex flex-wrap gap-3 mb-4">
+            <button type="button" class="btn btn-primary" id="btn-preview">Refresh preview</button>
+            <button type="button" class="btn btn-outline" id="btn-copy">Copy JSON</button>
+            <button type="button" class="btn btn-outline" id="btn-download-json">Download JSON</button>
+            <button type="button" class="btn btn-outline" id="btn-download-csv">Download CSV</button>
+            <button type="button" class="btn btn-outline" id="btn-print">Print</button>
+          </div>
+          <div id="preview" class="overflow-auto border border-slate-200 rounded-xl p-4 bg-white"></div>
+        </div>
+      </section>
+
+      <!-- Wizard controls -->
+      <div class="flex items-center justify-between pt-2">
+        <button type="button" class="btn btn-outline" id="prev">Back</button>
+        <button type="button" class="btn btn-primary" id="next">Next</button>
+      </div>
+
+    </form>
+  </main>
+
+  <footer class="max-w-6xl mx-auto px-4 pb-16">
+    <p class="text-xs text-slate-500">This is a frontend‑only form. Data stays in your browser until you export it.</p>
+  </footer>
+
+  <script>
+    // --- Wizard logic ---
+    const steps = Array.from(document.querySelectorAll('.step'));
+    const progressEl = document.getElementById('progress');
+    const stepLabel = document.getElementById('stepLabel');
+    const titles = [
+      'Contact', 'Current Status', 'Goals & Audience', 'Channels & Deliverables', 'Timeline & Budget', 'Compliance & Access', 'Review & Export'
+    ];
+    let current = 1;
+
+    function showStep(n) {
+      current = Math.min(Math.max(n, 1), steps.length);
+      steps.forEach(s => s.classList.add('hidden'));
+      document.querySelector(`.step[data-step="${current}"]`).classList.remove('hidden');
+      const pct = (current / steps.length) * 100;
+      progressEl.style.width = pct + '%';
+      stepLabel.textContent = `Step ${current} of ${steps.length} – ${titles[current-1]}`;
+      document.getElementById('prev').disabled = current === 1;
+      document.getElementById('next').textContent = current === steps.length ? 'Finish' : 'Next';
+      if (current === steps.length) buildPreview();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.getElementById('prev').addEventListener('click', () => showStep(current - 1));
+    document.getElementById('next').addEventListener('click', () => {
+      // Basic validation for required fields on step 1
+      if (current === 1) {
+        const req = ['contact_name','contact_email','company_name'];
+        for (const id of req) {
+          const el = document.getElementById(id);
+          if (!el.value.trim()) { el.focus(); el.reportValidity(); return; }
+        }
+      }
+      showStep(current + 1);
+    });
+
+    // --- Channel toggles ---
+    document.querySelectorAll('.channel').forEach(cb => {
+      cb.addEventListener('change', (e) => {
+        const target = document.querySelector(cb.dataset.target);
+        if (!target) return;
+        target.classList.toggle('hidden', !cb.checked);
+        updateComplexity();
+      });
+    });
+
+    // --- Chips component (Enter to add tag) ---
+    function initChips(container) {
+      const wrap = document.createElement('div');
+      wrap.className = 'flex flex-wrap gap-2 items-center border border-slate-300 rounded-xl p-2 bg-white';
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = 'Type and press Enter';
+      input.className = 'min-w-[180px] flex-1 outline-none';
+      const hidden = document.createElement('input');
+      hidden.type = 'hidden';
+      hidden.name = container.dataset.name;
+      wrap.appendChild(hidden);
+      wrap.appendChild(input);
+      container.appendChild(wrap);
+
+      function render(values) {
+        // Remove old chips (keep input & hidden)
+        wrap.querySelectorAll('.chip').forEach(c => c.remove());
+        const before = input;
+        values.forEach((val, idx) => {
+          const chip = document.createElement('span');
+          chip.className = 'chip';
+          chip.innerHTML = `<span>${val}</span>`;
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.innerHTML = '&times;';
+          btn.addEventListener('click', () => {
+            const arr = getValues().filter(v => v !== val);
+            setValues(arr);
+          });
+          chip.appendChild(btn);
+          wrap.insertBefore(chip, before);
+        });
+        hidden.value = JSON.stringify(values);
+      }
+      function getValues() {
+        try { return JSON.parse(hidden.value || '[]'); } catch { return []; }
+      }
+      function setValues(arr) { render(arr); }
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ',') {
+          e.preventDefault();
+          const val = input.value.trim();
+          if (val) {
+            const arr = getValues();
+            if (!arr.includes(val)) arr.push(val);
+            setValues(arr);
+            input.value = '';
+          }
+        }
+      });
+      return { getValues, setValues, hidden };
+    }
+
+    document.querySelectorAll('.chips').forEach(initChips);
+
+    // --- Complexity score (very rough heuristic) ---
+    function updateComplexity() {
+      let score = 0;
+      document.querySelectorAll('.channel:checked').forEach(() => score += 10);
+      const addNum = id => { const v = parseInt(document.getElementById(id)?.value||'0',10); if (!isNaN(v)) score += Math.min(v, 50)/5; };
+      addNum('seo_pages'); addNum('seo_blogs'); addNum('sm_posts'); addNum('sm_community'); addNum('content_blogs'); addNum('content_landings'); addNum('video_count'); addNum('video_length'); addNum('web_pages');
+      const urgency = (document.getElementById('urgency')?.value||'').toLowerCase();
+      if (urgency==='urgent') score += 10; else if (urgency==='normal') score += 5;
+      document.getElementById('complexityScore').textContent = Math.round(score);
+      const label = score < 20 ? 'Low' : score < 45 ? 'Medium' : 'High';
+      document.getElementById('complexityLabel').textContent = label;
+    }
+    document.querySelectorAll('input,select').forEach(el => el.addEventListener('input', updateComplexity));
+
+    // --- Collect form data ---
+    function collectData() {
+      const data = {};
+      const form = document.getElementById('intakeForm');
+      const fd = new FormData(form);
+      // Convert to object with arrays for multi-values
+      for (const [k, v] of fd.entries()) {
+        if (k.endsWith('[]')) {
+          const key = k.slice(0, -2);
+          (data[key] ||= []).push(v);
+        } else if (data[k] !== undefined) {
+          if (!Array.isArray(data[k])) data[k] = [data[k]];
+          data[k].push(v);
+        } else {
+          data[k] = v;
+        }
+      }
+      // Gather group checkboxes by name manually
+      const multiCheck = {
+        ppc_platforms: 'ppc_platforms',
+        sm_platforms: 'sm_platforms',
+      };
+      Object.keys(multiCheck).forEach(name => {
+        data[name] = Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el=>el.value);
+      });
+      // Channels selected
+      data.channels = Array.from(document.querySelectorAll('.channel:checked')).map(el => el.name.replace('ch_',''));
+      // Chips hidden JSON
+      document.querySelectorAll('.chips input[type="hidden"]').forEach(h => {
+        try { data[h.name] = JSON.parse(h.value || '[]'); } catch { data[h.name] = []; }
+      });
+      // Complexity snapshot
+      data.complexity_score = document.getElementById('complexityScore').textContent;
+      data.complexity_level = document.getElementById('complexityLabel').textContent;
+      return data;
+    }
+
+    // --- Preview & export ---
+    function buildPreview() {
+      const data = collectData();
+      const pre = document.getElementById('preview');
+      // Simple table rendering
+      const entries = Object.entries(data).filter(([k]) => k !== 'uploads');
+      const rows = entries.map(([k,v]) => `<tr class="odd:bg-slate-50"><td class="px-3 py-2 font-medium align-top">${k}</td><td class="px-3 py-2 text-slate-700">${Array.isArray(v)? v.join(', ') : (typeof v==='object'? JSON.stringify(v) : String(v||''))}</td></tr>`).join('');
+      pre.innerHTML = `<table class="w-full text-sm"><tbody>${rows}</tbody></table>`;
+    }
+
+    document.getElementById('btn-preview').addEventListener('click', buildPreview);
+    document.getElementById('btn-copy').addEventListener('click', async () => {
+      const json = JSON.stringify(collectData(), null, 2);
+      try { await navigator.clipboard.writeText(json); alert('Copied JSON to clipboard'); } catch { alert('Copy failed'); }
+    });
+    document.getElementById('btn-download-json').addEventListener('click', () => {
+      const blob = new Blob([JSON.stringify(collectData(), null, 2)], {type: 'application/json'});
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'intake.json'; a.click();
+    });
+    document.getElementById('btn-download-csv').addEventListener('click', () => {
+      const data = collectData();
+      const flat = Object.fromEntries(Object.entries(data).map(([k,v]) => [k, Array.isArray(v) ? v.join('; ') : v]));
+      const headers = Object.keys(flat);
+      const values = headers.map(h => '"' + String(flat[h] ?? '').replace(/"/g,'""') + '"');
+      const csv = headers.join(',') + '\n' + values.join(',');
+      const blob = new Blob([csv], {type: 'text/csv'});
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'intake.csv'; a.click();
+    });
+    document.getElementById('btn-print').addEventListener('click', () => window.print());
+
+    // --- Draft Save/Load/Clear (localStorage) ---
+    const DRAFT_KEY = 'dm_intake_draft_v1';
+    document.getElementById('btn-save').addEventListener('click', () => {
+      const data = collectData();
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+      alert('Draft saved in this browser.');
+    });
+    document.getElementById('btn-load').addEventListener('click', () => {
+      const raw = localStorage.getItem(DRAFT_KEY); if (!raw) { alert('No draft found.'); return; }
+      const data = JSON.parse(raw);
+      // Populate fields
+      const form = document.getElementById('intakeForm');
+      Object.entries(data).forEach(([k,v]) => {
+        const els = form.querySelectorAll(`[name="${k}"]`);
+        if (els.length) {
+          els.forEach(el => {
+            if (el.type === 'checkbox') {
+              if (Array.isArray(v)) { el.checked = v.includes(el.value); }
+              else { el.checked = !!v; }
+            } else if (el.type === 'radio') {
+              el.checked = (el.value == v);
+            } else if (el.type === 'file') {
+              // skip
+            } else {
+              el.value = Array.isArray(v) ? v[0] : v;
+            }
+          });
+        }
+        // chips
+        const chipHidden = document.querySelector(`.chips input[name="${k}"]`);
+        if (chipHidden) { chipHidden.value = JSON.stringify(v || []); chipHidden.dispatchEvent(new Event('change')); }
+      });
+      // Show channel detail panes based on checkboxes
+      document.querySelectorAll('.channel').forEach(cb => {
+        const target = document.querySelector(cb.dataset.target);
+        if (cb.checked && target) target.classList.remove('hidden');
+      });
+      updateComplexity();
+      alert('Draft loaded.');
+    });
+    document.getElementById('btn-clear').addEventListener('click', () => {
+      if (!confirm('Clear all fields?')) return;
+      document.getElementById('intakeForm').reset();
+      document.querySelectorAll('#preview').forEach(el => el.innerHTML='');
+      document.querySelectorAll('.chips input[type="hidden"]').forEach(h => { h.value = '[]'; h.dispatchEvent(new Event('change')); });
+      document.querySelectorAll('.channel').forEach(cb => { const t = document.querySelector(cb.dataset.target); if (t) t.classList.add('hidden'); });
+      updateComplexity();
+    });
+
+    // Re-render chips after load
+    document.querySelectorAll('.chips input[type="hidden"]').forEach(h => h.addEventListener('change', (e) => {
+      const wrap = h.parentElement; // has hidden + input
+      const input = wrap.querySelector('input[type="text"]');
+      // Remove chips then re-render
+      wrap.querySelectorAll('.chip').forEach(c => c.remove());
+      let vals = [];
+      try { vals = JSON.parse(h.value || '[]'); } catch {}
+      vals.forEach(val => {
+        const chip = document.createElement('span'); chip.className='chip'; chip.innerHTML=`<span>${val}</span>`; const btn=document.createElement('button'); btn.type='button'; btn.innerHTML='&times;'; btn.addEventListener('click',()=>{ const arr=vals.filter(v=>v!==val); h.value=JSON.stringify(arr); h.dispatchEvent(new Event('change')); }); chip.appendChild(btn); wrap.insertBefore(chip, input);
+      });
+    }));
+
+    // Init
+    showStep(1);
+    updateComplexity();
+  </script>
 </body>
 </html>
